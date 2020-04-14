@@ -144,3 +144,32 @@ this.$nextTick(() => {
   console.log(ulElem.childNodes.length)
 })
 ```
+
+## slot 插槽
+[这份详解说的很透彻](https://juejin.im/post/5a69ece0f265da3e5a5777ed)
+- 基本使用（单个插槽，默认插槽，匿名插槽 - 相对于匿名插槽，只在一个组件存在一个，没有 name 属性，且不带数据的插槽，不带数据但是可以设置默认值，没有 slot 属性的 html 模板默认关联匿名插槽）
+- 作用域插槽（有数据的插槽，作用域插槽要求，在slot上面绑定数据，属于来源于自组件本身，子组件的 data 可以被父组件读取到）
+- 具名插槽（带 name 属性，可以在组件中存在 N 个（组件存在多个`<slot name="xxx"></slot>`），出现在不同位置，会自动找到带有 slot 属性并且对应的 html 模板进行关联）
+```javascript
+// 作用域插槽
+// 父组件，title 获取的是子组件（作用域插槽）的title
+<ScopedSlotDemo :url="website.url">
+  <template v-slot="slotProps">
+    {{ slotProps.slotData.title }}
+  </template>
+</ScopedSlotDemo>
+
+// 子组件
+<slot :slotData="website">
+  {{ website.subTitle }}
+</slot>
+data(){
+  return {
+    website: {
+      title: 'Hi',
+      subTitle: 'default name'
+    }
+  }
+}
+
+```
