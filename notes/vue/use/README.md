@@ -123,3 +123,24 @@ methods: {
 - 动态、异步组件
 - keep-alive
 - mixin
+
+### 自定义 v-model
+为了实现双向数据绑定：  
+![](images/2020-04-14-15-38-34.png)  
+1. 上面的 `input` 使用了 `:value` 而不是 `v-model`
+2. 上面的 `change` 和 `model.event`要对应起来
+3. text 属性对应起来
+
+## $nextTick 和 refs
+- Vue 是异步渲染
+- data 改变之后，DOM 不会立即渲染
+- $nextTick 会在 DOM 渲染之后被触发，以获取最新 DOM 节点  
+在一个元素标签中写了`ref`属性，类似这样`<ul ref="ul1"></ul>`，这样定义之后可以像`const ulElem = this.$refs.ul1`来获取 DOM 元素，这是在 Vue 中获取 DOM 节点的常用方式。因为异步的关系，data 改变之后，DOM 不会立即渲染，如果执行`ulElem.childNodes.length`不会立即识别新增的 DOM。想要立即得到更新的data对DOM节点的影响，则使用 $nextTick：
+```javascript
+// 1. 因为data改变之后是异步渲染，而$nextTick 会等待 DOM 渲染完再回调
+// 2. 页面渲染时会将 data 的修改做整合，（一次事件触发）多次 data 修改只会渲染一次
+this.$nextTick(() => {
+  const ulElem = this.$refs.ul1
+  console.log(ulElem.childNodes.length)
+})
+```
