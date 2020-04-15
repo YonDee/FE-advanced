@@ -236,3 +236,14 @@ mixin 本质在 vue 中就和 vue 组件中导出的对象一样（具有 `data`
 - mapGetters
 - mapActions
 - mapMutations
+
+
+## [vue-router](https://router.vuejs.org/zh/) 使用
+- 考点不多（前提要熟悉 Vue）
+- 路由模式（hash、[H5 history](https://router.vuejs.org/zh/guide/essentials/history-mode.html)）
+- 路由配置（动态路由、懒加载：和异步组件类似，在 routes 中的component 属性中按需加载 import 引入的组件）
+
+### 路由模式
+- hash 模式（默认）
+- H5 history 模式
+- 后者需要 server 端支持
