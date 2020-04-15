@@ -214,3 +214,25 @@ mixin 本质在 vue 中就和 vue 组件中导出的对象一样（具有 `data`
 - 变量来源不明确， 不利于阅读（便也不利于维护）
 - 多个 mixin 可能会造成命名冲突
 - **mixin** 和**组件**可能会出现多对多的关系，复杂度较高
+
+## [Vuex](https://vuex.vuejs.org/zh/guide/) 使用
+- 考点不多（熟悉Vue，Vuex 没有难度）
+- 基本概念，基本使用和 API 必须要掌握
+- 会考察 state 的数据结构设计  
+这张图很重要：  
+![](images/2020-04-15-14-55-24.png)
+> Actions 中才可以进行异步操作（例如：网络请求，[IndexedDB](https://www.ruanyifeng.com/blog/2018/07/indexeddb.html)），整合多个 Mutation，Mutation 是原子（最小且同步）
+
+### Vuex 基本概念
+- state
+- getters
+- action
+- mutation
+
+### 用于 Vue 组件
+- dispatch
+- commit
+- mapState
+- mapGetters
+- mapActions
+- mapMutations
