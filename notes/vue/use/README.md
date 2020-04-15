@@ -173,3 +173,44 @@ data(){
 }
 
 ```
+
+## [动态组件](https://cn.vuejs.org/v2/guide/components-dynamic-async.html)
+- `:is= "component-name"` 用法
+- 需要根据数据，动态渲染的场景。即组件类型不确定（多个组件公用一个区域）  
+场景：比如新闻详情页，新闻的媒体内容排版是不一致的，这就需要动态组件来根据内容编排需要来渲染对应的组件
+
+## [异步组件](https://cn.vuejs.org/v2/guide/components-dynamic-async.html)
+- inport() 函数
+- 按需加载，异步加载大组件  
+什么时候用什么时候加载：
+```javascript
+// 在components中使用 import 引入组件
+components: {
+  FormDemo: () => import('../BaseUse/FormDemo')
+}
+```
+
+## keep-alive
+- 缓存组件，在上面[动态组件 & 异步组件](https://cn.vuejs.org/v2/guide/components-dynamic-async.html)中有提到相关内容
+- 频繁切换，不需要重复渲染
+- Vue 常见性能优化  
+用法：
+```javascript
+<keep-alive>
+  // 需要缓存的组件
+</keep-alive>
+```
+> 一般来说 v-show 即可实现简单的来回切换，但是如果多个组件层级复杂，可能使用 keep-alive 可以更直观
+
+
+## [mixin](https://cn.vuejs.org/v2/guide/mixins.html)
+vue 组件抽离公共逻辑，分发 vue 中复用的功能
+- 多个组件有相同的逻辑，抽离出来（将组件公共的部分放入 mixin 中）
+- mixin 并不是完美的解决方案，会有一些问题
+- Vue3 提出的 Composition API 旨在解决这些问题（启发于 React Hook）  
+mixin 本质在 vue 中就和 vue 组件中导出的对象一样（具有 `data`, 具有`methods`, 具有生命周期）。在需要 mixin 的组件中，先引入 mixin 文件，然后在组件对象的 `mixins` 属性中传入，这个属性需要传入一个数组，所以我们也可以传入多个 mixin 文件。  
+所以 mixin 的中文名称为 “混入”，意思便是我们将 mixin 对象中的信息混入（混合）到当前组件中。
+### mixin 的问题
+- 变量来源不明确， 不利于阅读（便也不利于维护）
+- 多个 mixin 可能会造成命名冲突
+- **mixin** 和**组件**可能会出现多对多的关系，复杂度较高
