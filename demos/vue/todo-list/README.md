@@ -1,6 +1,6 @@
-# todo-list
+# y
 
-> My neat Vue project
+> My cat&#39;s pajamas Vue project
 
 ## Commands
 
