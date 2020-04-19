@@ -1,13 +1,10 @@
 <template>
 <div>
-  <!-- 正确的写法 -->
   <input @input="inputChange()" v-model="inputContent" placeholder="What to plan to do?" />
   <button @click="submit()">submit</button>
   <ul>
     <li v-for="(item, index) in contentsList" :key="`contnet-${index}`">
-      <!-- 错误的写法：click 不能同步获取到 data -->
-      <!-- <input type="checkbox" @click="checkboxClick(item)" :value="item" v-model="checkedArr" /> {{ item }} -->
-      <input type="checkbox" @change="checkboxClick(item)" :value="item" v-model="checkedArr" /> {{ item }}
+      <input type="checkbox" @change="checkboxClick(item)" :value="item" v-model="checkedArr" /> <span v-bind:class="{finished: checkedArr.indexOf(item) >= 0}"> {{ item }} </span>
     </li>
   </ul>
 </div>
@@ -62,4 +59,8 @@ export default {
 </script>
 
 <style scoped>
+.finished {
+  text-decoration: line-through;
+  color: #ccc;
+}
 </style>
