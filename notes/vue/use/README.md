@@ -94,10 +94,10 @@ methods: {
 
 ## Vue 组件使用
 - props 和 $emit（父组件通过`props`向子组件传递信息，子组通过`$emit`向父组件触发事件）
-- 组件间通讯 - 自定义事件 （Vue 本身具有自定义事件的能力，用来实现同级组件，没有关系的组件之间的通信，除了Vuex的其他方案）
+- 组件间通讯 - 自定义事件 （Vue 本身具有自定义事件的能力，用来实现同级组件，没有关系的，跨组件之间的通信，除了Vuex的其他方案，查看实现提交：https://github.com/YonDee/FE-advanced/commit/f77351b64be0528a650f6c9b19c58634f4254568）
 - 组件声明周期（基本必须考）  
 声明周期相关：在开发过程中经常会碰到在`mounted`或者`created`生命周期中（使用 `$on`）监听（子组件`$emit`分发的）自定义事件，在`beforeDestroy`中（使用`$off`）销毁事件，以防可能出现的内存泄漏。  
-> 注意`this.$emit`和`event.$emit`是不同的，前者是嗲用父组件的事件，后者是调用自定义事件
+> 注意`this.$emit`和`event.$emit`是不同的，前者是调用父组件的事件，后者是调用自定义事件
 
 ### 组件[生命周期](https://cn.vuejs.org/v2/guide/instance.html)（单个组件）
 几个阶段：

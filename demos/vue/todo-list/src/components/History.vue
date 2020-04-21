@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h4>History：</h4>
     <ul>
       <li v-for="(item, index) in finished" :key="`finish-${index}`">{{ item }}</li>
     </ul>
@@ -15,8 +16,8 @@ export default {
     }
   },
   mounted() {
-    event.$on('finish', finished => {
-      // 这里不用箭头函数的话，this 会指向 event
+    event.$on('finish', (finished) => {
+      console.log(finished)
       this.finished = finished
     })
   }
