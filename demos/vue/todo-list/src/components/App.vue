@@ -2,7 +2,10 @@
 <div>
   <router-link to="/">Home</router-link>
   <router-link to="/history">History</router-link>
-  <router-view></router-view>
+  <!-- see: https://router.vuejs.org/zh/api/#router-view -->
+  <keep-alive>
+    <router-view></router-view>
+  </keep-alive>
 </div>
 </template>
 

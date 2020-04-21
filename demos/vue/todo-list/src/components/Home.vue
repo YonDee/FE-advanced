@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import event from './event'
 export default {
   data() {
     return {
@@ -51,6 +52,7 @@ export default {
     checkboxClick(value) {
       console.log(`checked value: ${value}`)
       console.log(this.checkedArr)
+      event.$emit('finish', this.checkedArr)
     },
     submit() {
       this.inputContent && this.contentsList.push(this.inputContent)
