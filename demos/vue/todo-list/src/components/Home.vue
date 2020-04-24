@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import event from './event'
 export default {
   components: {
     History: () => import("./History")
@@ -58,7 +57,8 @@ export default {
       console.log('input change')
     },
     checkboxClick(value) {
-      event.$emit('finish', this.checkedArr)
+      // event.$emit('finish', this.checkedArr)
+      this.$bus.$emit('finish', this.checkedArr)
     },
     submit() {
       this.inputContent && this.contentsList.push(this.inputContent)
@@ -66,7 +66,8 @@ export default {
     showHistory() {
       this.isShowHistory = !this.isShowHistory
       setTimeout(() => {
-        event.$emit('finish', this.checkedArr)
+        // event.$emit('finish', this.checkedArr)
+        this.$bus.$emit('finish', this.checkedArr)
       }, 0);
     }
   }
