@@ -8,18 +8,24 @@
 </template>
 
 <script>
-import event from './event'
 export default {
   data() {
     return {
       finished: []
     }
   },
-  mounted() {
-    event.$on('finish', (finished) => {
-      console.log(finished)
+  created() {
+    console.log('before component create')
+    this.$bus.$on('finish', (finished) => {
+      console.log('do on')
       this.finished = finished
     })
-  }
+  },
+  mounted() {
+    console.log(this.finished)
+  },
+  beforeDestroy() {
+    this.$bus.$off('finish')
+  },
 }
 </script>
