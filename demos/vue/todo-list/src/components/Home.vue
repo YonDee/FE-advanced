@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import event from './event'
 export default {
   components: {
     History: () => import("./History")
@@ -39,6 +38,7 @@ export default {
     console.log('before mount')
   },
   mounted() {
+    console.log(this.$store.state.history)
     console.log('mounted')
   },
   beforeUpdate() {
@@ -58,16 +58,17 @@ export default {
       console.log('input change')
     },
     checkboxClick(value) {
-      event.$emit('finish', this.checkedArr)
+      // ues vuex
+      this.$store.dispatch('setHistory', this.checkedArr)
     },
     submit() {
       this.inputContent && this.contentsList.push(this.inputContent)
     },
     showHistory() {
+      // ues vuex
+      this.$store.dispatch('setHistory', this.checkedArr)
+
       this.isShowHistory = !this.isShowHistory
-      setTimeout(() => {
-        event.$emit('finish', this.checkedArr)
-      }, 0);
     }
   }
 }

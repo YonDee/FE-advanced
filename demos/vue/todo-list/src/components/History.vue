@@ -8,18 +8,14 @@
 </template>
 
 <script>
-import event from './event'
 export default {
-  data() {
-    return {
-      finished: []
+  computed: {
+    finished: function() {
+      return this.$store.state.history
     }
   },
-  mounted() {
-    event.$on('finish', (finished) => {
-      console.log(finished)
-      this.finished = finished
-    })
+  beforeCreate() {
+    console.log(this.$store.state.history)
   }
 }
 </script>
