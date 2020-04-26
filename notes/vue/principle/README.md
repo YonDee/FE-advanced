@@ -32,13 +32,13 @@ MVVM:
 - VM: ViewModel（负责视图和数据的连接和处理）
 
 ## Vue 响应式
-- 组件 data 的数据一旦变化，立刻触发视图的更新
-- 实现数据驱动视图的第一步
+- **组件 data 的数据一旦变化，立刻触发视图的更新**
+- 实现**数据驱动视图**(vue 和 react 的特点)的第一步
 - 考察 Vue 原理的第一题（一般开始深入原理时初步范围会考察）  
 **和平时开发密切相关的原理**  
 - **核心 API - Object.defineProperty**
 - 如何实现响应式
-- Object.defineProperty 的一些缺点（Vue3.0 启用 Proxy - 兼容性不太好，且无法 polyfill）  
+- Object.defineProperty 的一些缺点（Vue3.0 启用 [Proxy](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy) - 兼容性不太好，且无法 [polyfill](https://developer.mozilla.org/zh-CN/docs/Glossary/Polyfill) - 一个兼容性的概念）  
 Object.defineProperty 基本用法：  
 ```javascript
 const data = {}
@@ -49,17 +49,21 @@ Object.defineProperty(data, "name", {
     return name
   },
   set: function (newVal) {
-    console.log('set')
-    return newVal
+    console.log('set') 
+    name = newVal
   }
 })
 
-// test
-console.log(data.name) // get zhangsan
-data.name = 'lisi' // set
+console.log(data.name)
+data.name = 'lisi'
+console.log(data.name)
 ```
+output:  
+![](images/2020-04-26-16-30-36.png)
+> 将赋值(set)和获取(get)变成一个函数，这样便于做监听
 
 ### Objcet.defineProperty 实现响应式
 - 监听对象，监听数组
 - 复杂对象，深度监听
 - 几个缺点
+
