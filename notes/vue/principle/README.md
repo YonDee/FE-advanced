@@ -31,7 +31,7 @@ MVVM:
 - V: View
 - VM: ViewModel（负责视图和数据的连接和处理）
 
-## Vue 响应式
+## [Vue 响应式](https://cn.vuejs.org/v2/guide/reactivity.html)
 - **组件 data 的数据一旦变化，立刻触发视图的更新**
 - 实现**数据驱动视图**(vue 和 react 的特点)的第一步
 - 考察 Vue 原理的第一题（一般开始深入原理时初步范围会考察）  
@@ -65,5 +65,10 @@ output:
 ### Objcet.defineProperty 实现响应式
 - 监听对象，监听数组
 - 复杂对象，深度监听
-- 几个缺点
+- 几个缺点  
 
+手动实现监听：[observer](../../../demos/observer)  
+
+#### 缺点
+- 深度监听，需要递归到底，一次性（对象层级过深 - 递归性能消耗非常大甚至卡死）计算量大 (vue3.0 对深度监听进行了优化)
+- 无法监听新增/删除属性（Vue.set / Vue.delete）
