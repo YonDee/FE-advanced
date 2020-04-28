@@ -72,6 +72,62 @@ output:
 #### 缺点
 - 深度监听，需要递归到底，一次性（对象层级过深 - 递归性能消耗非常大甚至卡死）计算量大 (vue3.0 对深度监听进行了优化)
 - 无法监听新增/删除属性（Vue.set / Vue.delete）
-- 无法原生监听数组，需要特殊处理（修改原型方法的触发方式，但是注意不要污染原型）
+- 无法原生监听数组，需要[特殊处理](https://github.com/YonDee/FE-advanced/commit/9d77af68a04f4870ff4af3660665e5886149b748)（修改原型方法的触发方式，但是注意不要污染原型）
 
+## 虚拟 DOM （Virtual DOM） 和 diff
+- vdom 是实现 vue 和 React 的重要基石
+- diff 算法是 vdom 中最核心、嘴关键的部分
+- vdom 是一个热门话题，也是面试中的热门问题
 
+- DOM 操作非常消耗性能
+- 以前用 jQuery，可以自行空值 DOM 操作的时机，手动调整（以 JQ 和 JS 操作 DOM 为点来进行优化）
+- Vue 和 React 是数据驱动视图， 如何有效控制 DOM 操作？
+
+### 解决方案 - vdom
+面临的问题
+- 有了一定复杂度，想减少计算次数比较难
+- 把计算转为JS计算，因为JS计算执行速度更快
+- **vdom - 用 JS 模拟 DOM 结构，计算出最小的变更，操作 DOM**  
+DOM：
+```html
+<div id="div1" class="container">
+  <p>vdom</p>
+  <ul style="font-size: 20px">
+    <li>a</li>
+  </ul>
+</div>
+```
+Virtual DOM:
+```javascript
+{
+  tag: 'div',
+  props: {
+    className: 'container',
+    id: 'div1'
+  },
+  children: [
+    {
+      tag: 'p',
+      children: 'vdom'
+    },
+    {
+      tag: 'ul',
+      props: { style: 'font-size: 20px' },
+      children: [
+        {
+          tag: 'li',
+          children: 'a'
+        }
+        // ...
+      ]
+    }
+  ]
+}
+```
+
+### [snabbdom](https://github.com/snabbdom/snabbdom)
+- 简洁强大的 vdom 库，易学易用
+- Vue 参考它实现的 vdom 和 diff
+- Vue 3.0 重写了 vdom 的代码，优化了性能
+- 但 vdom 的基本理念不变，面试考点也不变
+- React vdom 具体实现和 Vue 也不同，但不妨碍统一学习
