@@ -76,7 +76,7 @@ output:
 
 ## 虚拟 DOM （Virtual DOM） 和 diff
 - vdom 是实现 vue 和 React 的重要基石
-- diff 算法是 vdom 中最核心、嘴关键的部分
+- diff 算法是 vdom 中最核心、最关键的部分
 - vdom 是一个热门话题，也是面试中的热门问题
 
 - DOM 操作非常消耗性能
@@ -87,7 +87,8 @@ output:
 面临的问题
 - 有了一定复杂度，想减少计算次数比较难
 - 把计算转为JS计算，因为JS计算执行速度更快
-- **vdom - 用 JS 模拟 DOM 结构，计算出最小的变更，操作 DOM**  
+- **vdom - 用 JS 模拟 DOM 结构，计算出最小的变更，操作 DOM**(vdom 的意义以及概念)  
+  
 DOM：
 ```html
 <div id="div1" class="container">
@@ -124,10 +125,45 @@ Virtual DOM:
   ]
 }
 ```
+> 用 JS 对象方式来描述一个 DOM
+> 所以面试时会遇到诸如：请用 vnode 去模拟 html 片段
 
 ### [snabbdom](https://github.com/snabbdom/snabbdom)
 - 简洁强大的 vdom 库，易学易用
 - Vue 参考它实现的 vdom 和 diff
 - Vue 3.0 重写了 vdom 的代码，优化了性能
 - 但 vdom 的基本理念不变，面试考点也不变
-- React vdom 具体实现和 Vue 也不同，但不妨碍统一学习
+- React vdom 具体实现和 Vue 也不同，但不妨碍统一学习  
+
+#### snabbdom 的重点总结
+- h 函数
+- vnode 数据结构
+- patch 函数
+
+> 实际用例中可以看到 vdom 只会更新改变的部分，不会连带整个元素一起重新渲染，从而在渲染性能上也更加优秀
+
+### vdom 总结
+- 用 JS 模拟 DOM 结构（vnode）
+- 新旧 vnode 对比，得出最小的更新范围，最后更新 DOM
+- 数据驱动视图的模式下，有效控制 DOM 操作
+
+### diff 算法
+- diff 算法是 vdom 中的核心，最关键的部分
+- diff 算法能在日常使用 vue react 中体验出来（如：key）
+
+#### diff 算法描述
+- diff 即对比，是一个广泛的概念，如 linux diff 命令，git diff 等
+- 两个 js 对象也可以做 diff，如 [jiff](https://github.com/cujojs/jiff)
+- 两棵树对比差异会用到 diff，比如这里的 vdom diff
+
+#### 树 diff 的时间复杂度 O(n^3)
+- 第一，遍历 tree1; 第二，遍历 tree2
+- 第三，排序
+- 1000 个节点，要计算 1 亿此，算法不可用
+
+#### 解决上面的问题，优化事件复杂度到 O(n)
+- 只比较同一层级，不跨级比较
+- tag 不相同，则直接删掉重建，不再深度比较
+- tag 和 key，两者都相同，则认为是相同节点，不再深度比较  
+![](images/2020-04-29-15-37-47.png)  
+![](images/2020-04-29-15-38-11.png)
