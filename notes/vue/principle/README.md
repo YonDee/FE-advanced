@@ -166,4 +166,17 @@ Virtual DOM:
 - tag 不相同，则直接删掉重建，不再深度比较
 - tag 和 key，两者都相同，则认为是相同节点，不再深度比较  
 ![](images/2020-04-29-15-37-47.png)  
-![](images/2020-04-29-15-38-11.png)
+![](images/2020-04-29-15-38-11.png)  
+不使用 key 和 使用 key 的对比：  
+![](images/2020-04-29-16-25-31.png)
+> 不使用 key 意味着有变化将会直接删除并进行重新插入的处理，而使用了之后根据 key 在两个 children （oldChildren & children - new）之间找到相同的就无需删除重建，可以直接移动元素位置
+
+#### diff 算法总结
+- patchVnode
+- addVnodes removeVnodes
+- updateChildren (key 的重要性)
+> 上面的关键函数参考 [snabbdom](https://github.com/snabbdom/snabbdom) 进行查看，这里还有个算法原理的[总结](https://coding.imooc.com/learn/questiondetail/181966.html)
+
+#### vdom 和 diff 总结
+- vdom 核心概念很重要：h、vnode、patch、diff、key 等
+- vdom 存在的价值更加重要：**数据驱动视图，控制 DOM 操作**
