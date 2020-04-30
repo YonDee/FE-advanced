@@ -146,6 +146,7 @@ Virtual DOM:
 - 用 JS 模拟 DOM 结构（vnode）
 - 新旧 vnode 对比，得出最小的更新范围，最后更新 DOM
 - 数据驱动视图的模式下，有效控制 DOM 操作
+> vdom 本身是一个概念集合，vnode 是个具体的实现方式
 
 ### diff 算法
 - diff 算法是 vdom 中的核心，最关键的部分
@@ -180,3 +181,56 @@ Virtual DOM:
 #### vdom 和 diff 总结
 - vdom 核心概念很重要：h、vnode、patch、diff、key 等
 - vdom 存在的价值更加重要：**数据驱动视图，控制 DOM 操作**
+
+## 模板编译
+- 模板是 vue 开发中最常用的部分，即与使用相关联的原理
+- 模板不是 html，有指令、插值、JS 表达式；能实现判断、循环（一个可以实现顺序执行，判断，循环的计算机语言是具有图灵完备性的）
+- 一般会通过“组件渲染和更新过程”来考察
+> **模板在 vue 开发中会感觉类似于写 html，但并不是 html，模板最终会被转换成 JS 代码，而这个过程就叫做编译模板**
+### 重点内容
+- JS 的 [with](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/with) 语法（只是因为vue在模板编译时使用到了with，但是在一般开发中不建议使用with，会引起混淆错误和兼容性问题）
+- [vue template complier](https://github.com/vuejs/vue-docs-zh-cn/tree/master/vue-template-compiler) 将模板编译为 render 函数
+- 执行 render 函数生成 vnode（vnode 实现响应式和diff）  
+### 概念
+- 模板编译为 render 函数，执行 render 函数返回 vnode
+- 基于 vnode 再执行 patch 和 diff
+- 使用 webpack vue-loader，会在开发环境下编译模板
+
+> 大多数情况下我们不需要使用 vue-template-complier ，通常使用 vue-loader 便可以完成一般开发
+#### with
+```javascript
+const obj = {a: 100,b: 200}
+console.log(obj.a)
+console.log(obj.b)
+console.log(obj.c) // undefined
+
+// 使用 with，能改变 {} 内自由变量的查找方式
+// 将 {} 内自由变量，当作 obj 的属性来查找
+// 打破了作用域规则，易读性变差
+with(obj) {
+  console.log(a)
+  console.log(b)
+  console.log(c) // 报错
+}
+```
+
+### vue 组件中使用 render 代替 template
+这里和 React 不使用它的 JSX 是一个道理（但 JSX
+ 不是模板语言），不用模板去描述一系列 html 来进行 render
+```javascript
+Vue.component('heading', {
+  // template: ``,
+  render: function (createElement) {
+    'h' + this.level,
+    [
+      createElement('a', {
+        attrs: {
+          name: 'headerId',
+          href: '#' + 'headerId'
+        }
+      }, 'this is a tag')
+    ]
+  }
+})
+```
+> 上面这种方式不直观，可读性差，易出错，但是在一些无法用 template 满足的情况下，还是会用到 render，这里可以说 React 本身一直用 render，JSX 不能算严格意义上的模板（官方称之为标签语法，是 JavaScript 的语法扩展）
