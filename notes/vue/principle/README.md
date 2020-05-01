@@ -234,3 +234,48 @@ Vue.component('heading', {
 })
 ```
 > 上面这种方式不直观，可读性差，易出错，但是在一些无法用 template 满足的情况下，还是会用到 render，这里可以说 React 本身一直用 render，JSX 不能算严格意义上的模板（官方称之为标签语法，是 JavaScript 的语法扩展）
+
+## 组件 渲染/更新 过程
+知识点：
+- 响应式：监听 data 属性 getter setter （包括数组，数组的监听需要特别处理，参考上面的内容）
+- 模板编译：模板到 render 函数，再到 vnode
+- vdom: patch(elem, vnode) 创建 和 patch(vnode, newVnode) 更新  
+过程：
+- 初次渲染过程
+- 更新过程
+- 异步渲染
+
+### 初次渲染过程
+1. 解析模板为 render 函数（或在开发环境下已完成，例如已经build，vue-loader），注意这里不会执行 render
+2. 触发响应式，监听 data 属性 getter setter
+3. 执行 render 函数，生成 vnode，patch(elem, vnode)
+```html
+#### 执行 render 函数会触发 getter
+<p>{{ message }}</p>
+
+<script>
+export default{
+  data() {
+    message: 'hello', // 会触发 get
+    city: '背景'  // 不会触发 get，因为模板没用到，即和视图没关系
+  }
+}
+</script>
+```
+如上这段代码，再渲染的时候会先解析data，因为模板中使用了data中的message，所以执行了 data getter，之后再执行render。
+
+### 更新过程
+1. 修改 data，触发 setter（此前在 getter 中已被监听）
+2. 重新执行 render 函数，生成 newVnode
+3. patch(vnode, newVnode)（patch 中的 diff 算法会计算最小代价来进行差异更新）
+
+### 渲染和更新的过程流程图
+重要  
+![](images/2020-05-01-16-09-34.png)
+
+## 异步渲染
+优化相关的内容
+- 相关 $nextTick
+- 汇总 data 的修改，一次性更新视图
+- 减少 DOM 操作次数，提高性能  
+![](images/2020-05-01-16-12-26.png)
