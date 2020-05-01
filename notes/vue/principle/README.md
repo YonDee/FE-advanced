@@ -279,3 +279,41 @@ export default{
 - 汇总 data 的修改，一次性更新视图
 - 减少 DOM 操作次数，提高性能  
 ![](images/2020-05-01-16-12-26.png)
+
+## 前端路由原理
+- 复杂点的 SPA，都需要路由
+- vue-router
+- 和日常使用相关的原理  
+知识点：
+- vue-router 的路由模式
+- hash
+- history
+
+### 网页 url 组成部分
+![](images/2020-05-01-16-20-33.png)
+
+### hash 路由
+- hash 变化会触发网页跳转，即浏览器的前进、后退
+- hash 变化不会刷新页面，SPA 必须的特点
+- hash 永远不会提交到 server 端（与服务端不进行交互）
+#### 实现一个 hash 路由
+重点事件：[window.onhashchange](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/onhashchange)  
+[hash_router](../../../demos/vue/router/hash.html)
+
+### H5 history
+- 用 url 规范的额路由（没有'#'，路由形式和一般路由一样），但跳转时不刷新页面
+- [history.pushState](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState)
+- [window.onpopstate](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/onpopstate)
+
+> 因为仅在访问第一次的时候刷新页面，所以需要后端做[配置](https://router.vuejs.org/zh/guide/essentials/history-mode.html#%E5%90%8E%E7%AB%AF%E9%85%8D%E7%BD%AE%E4%BE%8B%E5%AD%90)
+
+#### 对比
+一般路由跳转每次都会刷新页面，而h5 history模式会：
+- https://github.com/xxx - 刷新页面
+- https://github.com/xxx/yyy - 前端跳转，不刷新页面
+- https://github.com/xxx/yyy/zzz - 前端跳转，不刷新页面
+
+### 总结
+- hash - window.onhashchange
+- H5 history - history.pushState 和 window.onpopstate
+- H5 history 需要后端支持

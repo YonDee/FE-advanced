@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>h5 history router</title>
+</head>
+<body>
+  <p>h5 history test</p>
+  <button id="btn1">修改 url</button>
+  <script>
+    // 页面初次加载，获取 hash
+    document.addEventListener('DOMCOntentLoaded', () => {
+      console.log('load', location.pathname)
+    })
+
+    // 打开一个新的路由
+    // 【注意】用 pushState 方式，浏览器不会刷新页面
+    document.getElementById('btn1').addEventListener('click', () => {
+      const state = { name: 'page1' }
+      console.log('切换路由到', 'page1')
+      history.pushState(state, '', 'page1') // 重要
+    })
+
+    // 监听浏览器 前进、后退
+    window.onpopstate = (evnet) => {  // 重要
+      console.log('onpopstate', evnet.state, location.pathname)
+    }
+
+    // 要后端做配置！
+  </script>
+</body>
+</html>
