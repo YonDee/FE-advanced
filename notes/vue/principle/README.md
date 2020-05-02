@@ -318,3 +318,17 @@ export default{
 - hash - window.onhashchange
 - H5 history - history.pushState 和 window.onpopstate
 - H5 history 需要后端支持
+
+## vue 原理 总结
+### 组件化
+从“组件化的历史”到“数据驱动视图”，然后谈一下 MVVM，vue 组件是一个可复用的 vue 实例，vue 组件的 data 必须是一个函数，vue文件中的对象会作为选项(option)构建组件实例，当存在多个相同组件被引用，其实都是基于同一份对象进行构建，如果data是对象，则这些组件data都会指向同一个对象，因为会互相影响。使用函数就可以在构建时调用函数生成对象，此时组件之间的data互不干扰。
+### 响应式
+核心API - Object.defineProperty ，可以利用其来监听对象（深度，使用递归），监听数组（自定义原型来监听），Object.defineProperty 缺点，所以引出 vue 3.0 使用 proxy 的原因。
+### vdom 和 diff
+一般弹传统 DOM 操作的性能消耗和操作方式，vnode 是个描述 html 片段的对象，一般 vdom 的实现，参考snabbdom（vnode 结构，h 函数，patch 函数）。
+### 模板编译
+首先要说到 vue 的模板编译实现，用了 with，参考项目 vue-template-compiler 来编译模板文件，模板编译的目的是编译成render函数，在生产环境中，使用 webpack，vue-loader 已经在打包时将模板编译成 render，执行 render 函数生成 vnode
+### 组件渲染更新过程
+有一张图在笔记中要记住。
+### 前端路由原理
+hash，h5 history，以及两个方式的应用场景。
