@@ -109,3 +109,36 @@ class ListDemo extends React.Component {
 }
 ```
 和 vue 自己有 `v-for` 指令不同，这里直接用 `{}` 写入表达式，并且要设置 JSX 返回值
+
+## 事件
+要点
+- bind this
+- 传递自定义参数
+- event 参数  
+### bind this
+> JSX 中绑定事件时不可直接使用`onclick`而是用驼峰命名方式来使用`onClick`  
+开发React应用时，经常会在`constructor`构造函数中使用`bind`来指定组件的自定义函数的`this`指向，默认情况下，在组件的自定义方法中直接调用`this`会指向`undefined`。除了在初始化时绑定，还有一种方式就是使用静态方法进行绑定，两种方式对比如下：
+```jsx
+// 这里最好在初始化时：this.clickHandler1 = this.clickHandler1.bind(this)
+clickHandler1() {
+  this.setState({
+    name: 'lisi'
+  })
+}
+
+// 静态方法，this 指向当前实例
+clickHandler2 = () => {
+  this.setState({
+    name: 'lisi'
+  })
+}
+```
+
+### event
+要点：
+1. React 的 event 是 SyntheticEvent（从 event 的 `__proto__.constructor`），模拟出来 DOM 事件所有能力
+2. `evnet.nativeEvent` 是原生事件对象
+3. 所有的事件，都被挂载到 document 上
+4. 和 DOM 事件不一样，和 Vue 事件（原生的）也不一样
+React 中传递的 event 不是原生的 event，是 React 封装的 SyntheticEvent（React event 的构造函数），我们可以在 React 封装的 event 中从 `nativeEvent` 来访问原生 event。  
+在 vue 中触发事件的地方是标签，事件绑定的地方也是标签。React 不同的地方在于，事件绑定被挂载到 document 上。
