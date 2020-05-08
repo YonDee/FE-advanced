@@ -136,9 +136,79 @@ clickHandler2 = () => {
 
 ### event
 要点：
-1. React 的 event 是 SyntheticEvent（从 event 的 `__proto__.constructor`），模拟出来 DOM 事件所有能力
+1. React 的 event 是 [SyntheticEvent](https://zh-hans.reactjs.org/docs/events.html)（从 event 的 `__proto__.constructor` 知悉），模拟出来 DOM 事件所有能力，官方称之为**合成事件**，
 2. `evnet.nativeEvent` 是原生事件对象
 3. 所有的事件，都被挂载到 document 上
 4. 和 DOM 事件不一样，和 Vue 事件（原生的）也不一样
 React 中传递的 event 不是原生的 event，是 React 封装的 SyntheticEvent（React event 的构造函数），我们可以在 React 封装的 event 中从 `nativeEvent` 来访问原生 event。  
 在 vue 中触发事件的地方是标签，事件绑定的地方也是标签。React 不同的地方在于，事件绑定被挂载到 document 上。
+
+## 表单
+要点：
+- 受控组件
+- 类似的双向绑定实现
+
+## 组件使用
+要点：
+- props 传递数据
+- props 传递函数
+- props 类型检查
+
+## setState
+要点：
+- 不可变值
+- 可能是异步更新
+- 可能会被合并
+### 不可变值
+在 setState 中更改数据，不可以修改原本的 state。这个 data 可以是原来 state 的一个副本，但是不可以是这个 state 本身
+```javascript
+const list5Copy = this.state.list5.slice()
+list5Copy.splice(2, 0, 'a')
+this.setState({
+  list1: this.state.list1.concat(100), // 追加
+  list2: [...this.state.list2, 100], // 追加
+  list3: this.state.lisst3.slice(0, 3), // 截取
+  list4: this.state.list4.fliter(item => item > 300), // 筛选
+  list5: list5Copy // 其他（复杂）操作
+})
+```
+不可以直接对 `this.state.list` 进行 `push`, `pop`, `splice` 等，这样违反不可变原则，不可变值得思想和纯函数的思路一致  
+除了数组，对象也不可以直接修改
+### state 异步
+在`setState`结束后，如果直接获取相关 state，可能会取不到新值。因为异步的关系，如果想要同步拿到数据，我们需要使用`setState()`的第二个参数设置回调函数。
+```javascript
+this.setState({
+  count: this.state.count + 1
+}, () => {
+  // 联想 vue 的 $nextTick
+  console.log('count by callback', this.state.count)
+})
+
+console.log('count', this.state.count) // 这样因为 setState 是异步的，拿不到最新值
+```
+但是
+```javascript
+// setTimeout 中 setState 是同步的
+setTimeout(() => {
+  this.setState({
+    count: this.state.count + 1
+  })
+  console.log('count in setTimeout', this.state.count)
+}, 0)
+```
+```javascript
+// 自定义的 DOM 事件，setState 是同步的
+bodyClickHandler = () => {
+  this.setState({
+    count: this.state.count + 1
+  })
+  console.log('count in body event', this.state.count)
+}
+componentDidmount() {
+  document.body.addEventListener('click', this.bodyClickHandler)
+}
+componentWillUnmount() {
+  document.body.removeEventListener('click', this.bodyClickHandler)
+}
+```
+> `setState` 直接使用的时候是异步的，但是在`setTimeout`和自定义事件中使用`setState`，是同步的
