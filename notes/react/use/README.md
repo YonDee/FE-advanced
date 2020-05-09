@@ -1,4 +1,10 @@
 # React 基本使用
+- JSX 基本使用
+- 条件
+- 列表
+- 事件
+- 表单
+- 组件和 props
 ## JSX
 要点
 - 变量、表达式
@@ -156,7 +162,7 @@ React 中传递的 event 不是原生的 event，是 React 封装的 SyntheticEv
 
 ## setState
 要点：
-- 不可变值
+- *不可变值
 - 可能是异步更新
 - 可能会被合并
 ### 不可变值
@@ -212,3 +218,39 @@ componentWillUnmount() {
 }
 ```
 > `setState` 直接使用的时候是异步的，但是在`setTimeout`和自定义事件中使用`setState`，是同步的
+
+### setState 合并 state
+```javascript
+// 传入对象，会被合并。执行结果只一次 +1 (类似 Object.assign)
+this.setState({
+  count: this.state.count + 1
+})
+
+this.setState({
+  count: this.state.count + 1
+})
+
+this.setState({
+  count: this.state.count + 1
+})
+// 传入函数，不会被合并
+this.setState((prevState, props) => {
+  return {
+    count: prevState.count + 1
+  }
+})
+this.setState((prevState, props) => {
+  return {
+    count: prevState.count + 1
+  }
+})
+this.setState((prevState, props) => {
+  return {
+    count: prevState.count + 1
+  }
+})
+```
+
+## React 生命周期
+[一图流](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+> 父子组件生命周期，和 Vue 的一样
