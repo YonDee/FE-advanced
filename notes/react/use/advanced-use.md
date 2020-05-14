@@ -70,3 +70,36 @@ function List(props) {
 
 ### ref
 回顾 Vue 中，对`ref`的使用是直接在dom节点上使用`ref="xxx"`这样的方式来定义，之后在vue中使用`this.$refs.xxx`来获取定义的ref。与 React 的不同在于，ref 在 Vue 中，被定义成一个字符串，而 React 是一个对象，需要提前在组件构造函数中使用`React.createRef()`，例如在构造中声明 `this.nameInputRef = React.createRef()` ，在需要的地方调用`this.nameInputRef.current`来通过 ref 获取 DOM 节点。
+
+
+## Portals
+中文翻译：传送门  
+关注点：一般情况下，组件默认会按照既定层次嵌套渲染。如何让组件渲染到父组件以外？  
+用法：
+```javascript
+import React from 'react'
+import ReactDom from 'react-dom'
+
+class App extends React.Component {
+/***
+ * ..........
+ * **/
+  render() {
+    // 通常这里返回一个 JSX
+    /****
+     * ...........
+     * **/
+    // Portals 应用 ↓
+    return ReactDOM.createProtal(
+      <div className="modal">{this.props.children}</div>,
+      document.body
+    )
+  }
+}
+
+export default App
+```
+### 应用场景
+- 父组件设置了 overflow:hidden，子组件需要跳出限制
+- 父组件 z-index 层级太低
+- fixed 需要放在 body 第一层级
