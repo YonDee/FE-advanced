@@ -53,7 +53,7 @@ function List(props) {
 对应[受控组件](https://zh-hans.reactjs.org/docs/forms.html#controlled-components)  
 关注点：
 - ref
-- defaultValue defaultChecked
+- defaultValue defaultChecked (非受控组件的 state 通常只是表达一个默认值)
 - 手动操作 DOM 元素
 
 ### 概念
@@ -64,6 +64,9 @@ function List(props) {
 - 文件上传 `<input type="file" />`
 - 某些富文本编辑器，需要传入 DOM 元素
 
+### 使用原则
+- 优先使用受控组件，符合 React 设计原则
+- 必须操作 DOM 时，再使用非受控组件
+
 ### ref
 回顾 Vue 中，对`ref`的使用是直接在dom节点上使用`ref="xxx"`这样的方式来定义，之后在vue中使用`this.$refs.xxx`来获取定义的ref。与 React 的不同在于，ref 在 Vue 中，被定义成一个字符串，而 React 是一个对象，需要提前在组件构造函数中使用`React.createRef()`，例如在构造中声明 `this.nameInputRef = React.createRef()` ，在需要的地方调用`this.nameInputRef.current`来通过 ref 获取 DOM 节点。
-
