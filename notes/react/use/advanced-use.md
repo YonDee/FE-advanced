@@ -75,7 +75,7 @@ function List(props) {
 ## Portals
 中文翻译：传送门  
 关注点：一般情况下，组件默认会按照既定层次嵌套渲染。如何让组件渲染到父组件以外？  
-用法：
+### 用法
 ```javascript
 import React from 'react'
 import ReactDom from 'react-dom'
@@ -103,3 +103,14 @@ export default App
 - 父组件设置了 overflow:hidden，子组件需要跳出限制
 - 父组件 z-index 层级太低
 - fixed 需要放在 body 第一层级
+
+## [context](https://zh-hans.reactjs.org/docs/context.html) (上下文)
+概念：需要将公共信息（语言，主题）传递给每个组件，此时使用 props 太繁琐，用 redux 小题大做。  
+### 用法
+```javascript
+import React from 'react'
+// 1. 核心 API ，用于创建上下文
+const ThemeContext = React.createContext('light')
+
+// 
+```
