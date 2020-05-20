@@ -105,12 +105,72 @@ export default App
 - fixed 需要放在 body 第一层级
 
 ## [context](https://zh-hans.reactjs.org/docs/context.html) (上下文)
-概念：需要将公共信息（语言，主题）传递给每个组件，此时使用 props 太繁琐，用 redux 小题大做。  
+官方定义：Context 提供了一个无需为每层组件手动添加 props，就能在组件树间进行数据传递的方法。  
+概念：需要将公共信息（语言-地区偏好，主题）传递给每个组件，此时使用 props 太繁琐，用 redux 小题大做。  
 ### 用法
 ```javascript
 import React from 'react'
-// 1. 核心 API ，用于创建上下文
+
+// 创建 Context 填入默认值（任何一个 js 变量）
 const ThemeContext = React.createContext('light')
 
-// 
+// 底层组件 - 函数是组件
+function ThemeLink (props) {
+    // const theme = this.context // 会报错。函数式组件没有实例，即没有 this
+
+    // 函数式组件可以使用 Consumer
+    return <ThemeContext.Consumer>
+        { value => <p>link's theme is {value}</p> }
+    </ThemeContext.Consumer>
+}
+
+// 底层组件 - class 组件
+class ThemedButton extends React.Component {
+    // 指定 contextType 读取当前的 theme context。
+    // static contextType = ThemeContext // 也可以用 ThemedButton.contextType = ThemeContext
+    render() {
+        const theme = this.context // React 会往上找到最近的 theme Provider，然后使用它的值。
+        return <div>
+            <p>button's theme is {theme}</p>
+        </div>
+    }
+}
+ThemedButton.contextType = ThemeContext // 指定 contextType 读取当前的 theme context。
+
+// 中间的组件再也不必指明往下传递 theme 了。
+function Toolbar(props) {
+    return (
+        <div>
+            <ThemedButton />
+            <ThemeLink />
+        </div>
+    )
+}
+
+class App extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            theme: 'light'
+        }
+    }
+    render() {
+        return <ThemeContext.Provider value={this.state.theme}>
+            <Toolbar />
+            <hr/>
+            <button onClick={this.changeTheme}>change theme</button>
+        </ThemeContext.Provider>
+    }
+    changeTheme = () => {
+        this.setState({
+            theme: this.state.theme === 'light' ? 'dark' : 'light'
+        })
+    }
+}
+
+export default App
 ```
+核心API：`const MyContext = React.createContext(defaultValue)`，更多具体参考文档的[Context API部分](https://zh-hans.reactjs.org/docs/context.html#api) 
+> 例如上面示例中的 `ThemeContext.Provider` 就是在 `React.createContext` 创建了`ThemeContext`这个 Context 之后使用的API。很好理解  
+> 关注点还是在 Context 的应用场景，Context 适合很少修改，主要从根节点下发数据的情形。
+
