@@ -172,5 +172,21 @@ export default App
 ```
 核心API：`const MyContext = React.createContext(defaultValue)`，更多具体参考文档的[Context API部分](https://zh-hans.reactjs.org/docs/context.html#api) 
 > 例如上面示例中的 `ThemeContext.Provider` 就是在 `React.createContext` 创建了`ThemeContext`这个 Context 之后使用的API。很好理解  
-> 关注点还是在 Context 的应用场景，Context 适合很少修改，主要从根节点下发数据的情形。
+> 关注点还是在 Context 的应用场景，Context 适合很少修改，主要从根节点（最外层定义的语言、地域，主题信息）下发数据的情形。
 
+## 异步组件
+> 在 vue 中，我们使用`import()`去加载组件来实现异步组件，实际上`import()`是ES的一个异步加载的标准语法。
+  
+React 不同于`import()`进行异步加载:
+### 关键 API
+- React.lazy()
+- React.Suspense
+```javascript
+// 异步加载
+const ContextDemo = React.lazy(() => import('./ContextDemo'))
+
+// 使用异步加载并且设置默认显示
+<React.Suspense fallback = { <div>Loading...</div> }>
+  <ContextDemo />
+</React.Suspense>
+```
