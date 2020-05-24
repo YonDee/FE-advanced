@@ -190,3 +190,24 @@ const ContextDemo = React.lazy(() => import('./ContextDemo'))
   <ContextDemo />
 </React.Suspense>
 ```
+
+## 性能优化
+性能优化对于 React **更加**重要  
+要点：
+- setState 的不可变值
+- shouldComponentUpdate（简称 SCU）
+- PureComponent 和 React.memo
+- 不可变值 immutable.js
+
+### SCU 基本用法
+从概念上说这是性能优化一个非常重要的项目，但是并不代表一定要使用，有性能问题再考虑使用。
+```javascript
+shouldComponentUpdate(nextProps, nextState) {
+  if (nextState.count !== this.state.count) {
+    return true // 可以渲染
+  }
+  return false // 不重复渲染
+}
+```
+在 react 中，没有优化时，**父组件的更新会触发子组件的更新**，`shouldComponentUpdate` 默认情况下返回 `true` 也就是触发渲染，反过来说我们可以利用`shouldComponentUpdate`（在函数中用条件）控制组件的渲染，从而提升性能。（如果违反不可变值规则，数据被提前更新，SCU 将不会按照预期渲染组件）
+
