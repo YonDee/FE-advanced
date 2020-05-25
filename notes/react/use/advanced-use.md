@@ -211,3 +211,49 @@ shouldComponentUpdate(nextProps, nextState) {
 ```
 在 react 中，没有优化时，**父组件的更新会触发子组件的更新**，`shouldComponentUpdate` 默认情况下返回 `true` 也就是触发渲染，反过来说我们可以利用`shouldComponentUpdate`（在函数中用条件）控制组件的渲染，从而提升性能。（如果违反不可变值规则，数据被提前更新，SCU 将不会按照预期渲染组件）
 
+## PureComponent 和 memo
+PureComponent ，SCU 中实现了浅比较（为了性能，但遵从不可变值，满足大多数情况，尽量不要做深度比较）
+### PureComponent
+概念：纯组件（取代前身 PureRenderMixin），可以减少不必要的 render 次数，从而提高性能。并且可以少写`shouldComponentUpdate`函数，节省了代码。
+> 在一般的`React.Component`中，并没有实现`shouldComponentUpdate()`，而 `React.PureComponent` 中以浅层对比 prop 和 state 的方法来实现了该函数  
+大多数情况下，如果需要优化性能，这是一个比较常用的API。尽量可以避免编写 SCU。
+```javascript
+class List extends React.PureComponent {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    const {list} = this.porps
+
+    return <ul>{
+      list.map((item, index) => {
+        return <li>
+          <span>{item.title}</span>
+        </li>
+      })
+    }</ul>
+  }
+  // 这个可以省略
+  shouldComponentUpdate(){ /*浅层比较*/ }
+}
+```
+
+### React.memo
+概念：一个 React 提供的包装函数的 API，与 `React.PureComponent` 非常相似，但只适用于**函数组件**，而不适用于 **class** 组件
+```javascript
+function MyComponent(props) {
+  /* 使用 props 渲染 */
+}
+function areEqual(prevProps, nextProps) {
+  /*
+  如果把 nextProps 传入 render 方法的返回结果与
+  将 prevProps 传入 render 方法的返回结果一致则返回 true，
+  否则返回 false
+  */
+}
+export default React.memo(MyComponent, areEqual);
+```
+
+## immutable.js
+贯彻 **不可变值** 概念的不可变库。了解其存在即可，使用需要一定的学习。[项目地址](https://github.com/immutable-js/immutable-js)
