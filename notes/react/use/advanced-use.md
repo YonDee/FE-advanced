@@ -257,3 +257,40 @@ export default React.memo(MyComponent, areEqual);
 
 ## immutable.js
 贯彻 **不可变值** 概念的不可变库。了解其存在即可，使用需要一定的学习。[项目地址](https://github.com/immutable-js/immutable-js)
+
+## React 高阶组件（HOC）
+### 关于组件公共逻辑的抽离
+- mixin，已被 React 弃用
+- 高阶组件 简称 HOC（Higher-Order Components
+）
+- Render Props
+
+### 高阶组件基本用法
+高阶组件不是一种功能，而是一种模式
+```javascript
+const HOCFacotry = (Component) => {
+  class HOC extends React.Component {
+    // 在此定义多个组件的公共逻辑
+    render() {
+      return <Component {...this.props} /> // 返回拼装的结果
+    }
+  }
+  return HOC
+}
+const EnhancedComponent1 = HOCFactory(WrappedComponent1)
+const EnhancedComponent2 = HOCFactory(WrappedComponent2)
+```
+接受一个组件，定义完公共逻辑之后返回一个新组件，上面的 EnhancedComponent1 和 EnhancedComponent2 便是已经定义过公共逻辑并且返回的新组件。主要就是将公共逻辑抽离出来，使用 HOC 来进行统一处理，之后返回一个具有公共逻辑功能的新组件。  
+高阶组件具有“透传所有 props”的特性，会将高阶组件所接受的 props 传递给返回的子组件（同样的功能，Vue 使用 $props 和 v-bind 来实现）。
+#### redux connect 是高阶组件
+用法
+```javascript
+import { connect } from 'react-redux'
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
+
+export default VisibleTodoList
+```
+
