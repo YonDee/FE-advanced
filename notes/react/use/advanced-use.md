@@ -294,3 +294,34 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
+## Render Props
+另一种 HOC 形式。  
+下面的例子让组件接受了一个名为`render`的函数prop，`render`并不是一个严格的命名，任何被用于告知组件需要渲染什么内容的函数 prop 在技术上都可以被称为 Render Prop
+```javascript
+// Render Props 的核心思想
+// 通过一个函数将 class 组件的 state 作为 props 传递给纯函数组件
+class Factory extends React.Component {
+  constructor() {
+    this.state = {
+      /* state 即多个组件的公共逻辑的数据 */
+    }
+  }
+  /* 修改 state */
+  render() {
+    return <div>{this.props.render(this.state)}</div>
+  }
+}
+
+const App = () => {
+  <Factory render={
+    /* render 是一个函数组件 */
+    (props) => <p>{props.a} {props.b} ...</p>
+  }>
+}
+```
+
+## HOC 对比 Render Props
+- HOC：模式简单，但会增加组件层级
+- Render Props：代码简洁，学习成本较高（其实也还好）
+- 按需使用
+
