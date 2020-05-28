@@ -325,3 +325,24 @@ const App = () => {
 - Render Props：代码简洁，学习成本较高（其实也还好）
 - 按需使用
 
+## Redux
+和 Vuex 想比，Redux 理解上需要花的时间更多。  
+关键点：
+- 基本概念
+- 单向数据流
+- react-redux
+- 异步 action
+- 中间件
+
+### 基本概念
+- store state
+- action
+- reducer
+#### 单向数据流流程
+- dispatch(action)
+- reducer -> newState
+- subscribe 触发通知
+
+## react-redux
+redux 并不是专门为 react 设计的，但是 react-redux 是 react 专用的库。
+
