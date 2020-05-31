@@ -49,3 +49,47 @@ React.createElement("div", {id: "div1"}, React.createElement("p", null, "some te
 更多可以参考 Babel 提供的在线示例，写入 JSX 之后 Babel 所编译的内容。[测试地址](https://www.babeljs.cn/)
 
 
+## 合成事件
+React 的事件：
+- 所有事件挂载到 document 上
+- event 不是原声的，是 SyntheticEvent 合成事件对象
+- 和 Vue 事件不同，和 DOM 事件也不同  
+
+![](./images/W_V(7[E`6NS)WJ1F%9$_860.png)
+
+### 为什么需要合成事件机制?
+- 更好兼容性和跨平台
+- 挂载到 document，减少内存消耗，避免频繁解绑
+- 方便事件的统一管理（如事务机制）
+
+## setState 和 batchUpdate
+预先了解的 setState 概念：
+- 有时异步（普通使用），有时同步（setTimeout、DOM 事件）
+- 有时合并（对象形式），有时不合并（函数形式）  
+
+核心知识点：
+- setState 流程
+- batchUpdate 机制
+- transaction （事务）机制
+
+### setState 流程
+![](./images/setState.png)
+图可见 “是否处于 batch update” 很重要。
+
+### 机制详解
+React 在执行函数时，会由 React 对函数设置一个 `isBatchingUpdates`变量，函数执行开始时初始值为 `true`，函数执行完毕之后会被设置成`false`（所以setTimeout 中的 setState 是同步的。）
+
+### 总结
+- setState 无所谓异步还是同步
+- 看是否能命中 batchUpdate 机制
+- 判断 isBatchingUpdates （变量是ture还是false）
+
+### 哪些能命中 batchUpdate 机制
+- 生命周期（和它调用的函数）
+- React 中注册的事件（和它调用的函数）
+- React 可以“管理”的入口
+
+### 不能被 batchUpdate 机制命中
+- setTimeout setInterval 等（和它调用的函数）
+- 自定义的 DOM 事件（和它调用的函数）
+- React “管不到” 的入口
