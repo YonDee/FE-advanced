@@ -55,7 +55,7 @@ React 的事件：
 - event 不是原声的，是 SyntheticEvent 合成事件对象
 - 和 Vue 事件不同，和 DOM 事件也不同  
 
-![](./images/W_V(7[E`6NS)WJ1F%9$_860.png)
+![](./images/event.png)
 
 ### 为什么需要合成事件机制?
 - 更好兼容性和跨平台
