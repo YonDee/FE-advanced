@@ -93,3 +93,27 @@ React 在执行函数时，会由 React 对函数设置一个 `isBatchingUpdates
 - setTimeout setInterval 等（和它调用的函数）
 - 自定义的 DOM 事件（和它调用的函数）
 - React “管不到” 的入口
+
+## transaction 事务机制
+```javascript
+class ListDemo extends React.Component {
+  constructor(props) {
+  }
+  
+  render() {
+  }
+
+  increase = () => {
+    // 开始：处于 batchUpdate
+    // isBatchingUpdates = true
+    
+    // 其他任何操作
+
+    // 结束
+    // isBatchingUpdates = false
+  }
+}
+```
+这个流程就是 transaction 事务机制  
+具体流程图：  
+![](./images/transaction.png)
