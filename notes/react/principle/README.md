@@ -153,3 +153,17 @@ class ListDemo extends React.Component {
 - setState(newState) --> dirtyComponents （可能有自组件，不仅仅包含当前触发的组件）
 - render() 生成 newVnode
 - patch(vnode, newVnode)
+
+## fiber
+React 的 patch 分为两个阶段：
+1. **reconciliation** 阶段 - 执行 diff 算法，纯 JS 计算
+2. **commit** 阶段 - 将 diff 结果渲染 DOM
+### 为什么要分阶段
+- JS 是单线程，并且 JS 和 DOM 渲染共用一个线程
+- 当组件足够复杂，组件更新时计算和渲染的压力也会变大
+- 同时再有 DOM 操作需求（动画，鼠标拖拽等），将卡顿
+
+### React 的解决方案 fiber
+- 将 reconciliation 阶段进行任务拆分（commit 无法拆分）
+- DOM 需要渲染时暂停计算，空闲时恢复计算
+- window.requestIdleCallback 用于判断什么时候暂停
