@@ -18,7 +18,7 @@
 
 ## vdom 和 diff
 - h 函数（React.createElement()）
-- vnode 数据结构(React.createElement() 返回值)
+- vnode 数据结构(React.createElement() 返回值，一半叫做 ReactElement)
 - patch 函数
 ---
 - 只比较同一级，不跨级比较
@@ -33,7 +33,8 @@
 - Vue 模板不是 html
 - JSX 也不是 JS，是 JS 的语法扩展  
 
-JSX 会被自动转义成 JS 代码以及 React API。要重点关注`React.createElement()`这个方法，每当JSX有新的标签结构时，就会调用这个方法。
+JSX 会被自动转义成 JS 代码以及 React API。要重点关注`React.createElement()`这个方法，每当JSX有新的标签结构时，就会调用这个方法。  
+
 ```javascript
 const imgElem = <div id="div1">
   <p>some text</p>
@@ -45,6 +46,8 @@ React.createElement("div", {id: "div1"}, React.createElement("p", null, "some te
 ```
 上面可以看出来，`React.createElement()` 第一个参数是tag的名称，第二个是tag中的参数（例如：style, id, class, 事件 等等），第三个是子元素，子元素也可以这样嵌套（调用 createElement 创建）子元素（套娃就完事了）。  
 > 但实际上 `createElement` 第一个参数不一定是 tag 名称，也可能是一个组件的变量名。子元素也可以是组件这样套下去。（从`createElement`第一个参数的首字母大小写，可以知道是 tag 还是组件）
+
+摘录[掘金文章](https://juejin.im/post/5b9a45fc5188255c402af11f)的一段：我们写 React 组件的时候，通常会使用 JSX 来**描述组件**。`<p></p>`这种写法经过 **babel** 转换后，会变成以 `React.createElement(type, props, children)` 形式。而我们的例子中，`type` 会是两种类型：`function`、`string`。`function`一般是指`ReactComponent`的 `constructor` 或者函数式组件的 `function`，而 `string` 类型的就是 HTML 标签。  
 
 更多可以参考 Babel 提供的在线示例，写入 JSX 之后 Babel 所编译的内容。[测试地址](https://www.babeljs.cn/)
 
