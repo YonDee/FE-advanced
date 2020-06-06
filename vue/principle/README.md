@@ -67,7 +67,7 @@ output:
 - 复杂对象，深度监听
 - 几个缺点  
 
-手动实现监听：[observer](../../../demos/observer)  
+手动实现监听：[observer](./demos/observer)  
 
 #### 缺点
 - 深度监听，需要递归到底，一次性（对象层级过深 - 递归性能消耗非常大甚至卡死）计算量大 (vue3.0 对深度监听进行了优化)
@@ -293,7 +293,7 @@ export default{
 ![](images/2020-05-01-16-20-33.png)
 
 ### hash 路由
-[hash_router](../../../demos/vue/router/hash.html)
+[hash_router](./demos/vue/router/hash.html)
 - hash 变化会触发网页跳转，即浏览器的前进、后退
 - hash 变化不会刷新页面，SPA 必须的特点
 - hash 永远不会提交到 server 端（与服务端不进行交互）
@@ -301,7 +301,7 @@ export default{
 重点事件：[window.onhashchange](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/onhashchange)  
 
 ### H5 history
-[H5_history](../../../demos/vue/router/h5_history.html)
+[H5_history](./demos/vue/router/h5_history.html)
 - 用 url 规范的额路由（没有'#'，路由形式和一般路由一样），但跳转时不刷新页面
 - [history.pushState](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState)
 - [window.onpopstate](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/onpopstate)
