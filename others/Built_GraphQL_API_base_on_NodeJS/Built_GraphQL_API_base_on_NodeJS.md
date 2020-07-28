@@ -255,4 +255,115 @@ TypeScript 里面定义属性的时候给我们提供了 三种修饰符：
   
 在面向对象的编程中，接口是一种规范的定义，它定义了行为和动作规范，在程序设计里面，**接口起到了一种限制和规范的作用**。  
   
-接口定义了某一批类所需要遵守的规范，接口不关心这些类的内部状态数据，也不关心这些类里面方法的实现细节，它只规定这批类里面必须提供某些方法，提供这些方法的类就可以满足实际需要（比如接口需求的内容会被类的后续函数进行处理）
+接口定义了某一批类所需要遵守的规范，接口不关心这些类的内部状态数据，也不关心这些类里面方法的实现细节，它只规定这批类里面必须提供某些方法，提供这些方法的类就可以满足实际需要。
+
+## Egg.js
+[egg.js](https://eggjs.org/zh-cn/) 的特点：属于框架之上的框架，继承 [koa](https://www.koajs.com.cn/) 的优点，约束了 koa 开发过于自由的问题，提供了一套开发规范。
+> 这里我想到了我之前在了解 eggjs 的时候看到有人说的一点很透彻，如果想实现一个健壮的应用，使用 koa 开发到后来就会变成 eggjs 的样子。
+
+### 约定大于配置
+一定的约束可以有效防止开发人员秀操作，在一定的约束的情况下更好的协作，项目被接手也能更有效的读懂代码，高效的定位功能点。
+
+## 项目基础搭建
+因为使用了 TS 所以在创建 eggjs 的时候需要添加额外的命令行参数：
+```shell
+$ npm init egg --type=ts
+$ npm i
+```
+Egg API 项目中，一般都会包括这些功能项：路由文件、控制器目录、逻辑层目录。
+### 安装 GraphQL 相关依赖插件
+[@switchdog/egg-graphql](https://www.npmjs.com/package/@switchdog/egg-graphql)
+```shell
+$ npm i --save @switchdog/egg-graphql
+```
+开启：
+```typescript
+// config/plugin.ts
+graphql: {
+  enable: true,
+  package: '@switchdog/egg-graphql',
+},
+```
+配置：
+```typescript
+// /config/config.default.ts
+config.graphql = {
+  router: '/graphql',
+  // 是否加载到 app 上，默认开启
+  app: true,
+  // 是否加载到 agent 上，默认关闭
+  agent: false,
+  // 是否加载开发者工具 graphiql, 默认开启。路由同 router 字段。使用浏览器打开该可见。
+  graphiql: true,
+  apolloServerOptions: {
+    tracing: true, // 设置为true时，以Apollo跟踪格式收集和公开跟踪数据
+    debug: true, // 一个布尔值，如果发生执行错误，它将打印其他调试日志记录
+  },
+};
+```
+配置文件中配置中间件：
+```typescript
+config.middleware = [ 'graphql' ];
+```
+配置完成之后，每个落到 `/graphql`的请求都会触发 GraphQL Schema 的查询
+
+### 安装 CORS 跨域访问
+安装 egg-cors
+```shell
+$ npm i egg-cors --save
+```
+开启
+```typescript
+// /config/plugin.ts
+cors: {
+  enable: true,
+  package: 'egg-cors',
+},
+```
+配置
+```typescript
+// /config/config.default.ts
+config.cors = {
+  origin: '*', 
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+};
+```
+关闭
+```typescript
+// /config/config.default.ts
+config.security = {
+  csrf: {
+    ignore: () => true,
+  },
+};
+```
+
+## GraphQL 尝试
+一个最简单的 GraphQL 目录包含三个文件：  
+![](images/2020-07-28-16-39-15.png)  
+[访问 demo](./demo/app/hello)
+
+### schema.graphql
+graphql 自带一组默认标量类型，包括 `Int`，`Float`，`String`，`Boolean`，`ID`。在**定义字段时需要注明类型**，这也是 graphql 的特点之一，是支持强类型的。如果非空，就在类型后面跟上一个`!`号。
+
+### connector
+编写完 schema 之后，graphql 知道有哪些数据了，但他还需要知道 “如何去取”， connector 的角色就在于此。 connector 的职责就是 “取数”， 他既可以调用 rpc 接口取数，又可以调用内置的 orm 插件去取数，还可以直接调用 egg 的 service。
+
+
+### resolver
+resolve.js是数据类型的具体实现，依赖connector.js完成。其实 resolver 非常简单，就是针对你暴露的查询接口，调用相应的connector去取数即可
+
+### 初试总结
+之后一切配置完毕之后，便可以测试项目
+```shell
+$ npm run dev
+```
+![](images/2020-07-28-16-47-15.png)  
+结果的顺序也是按照你输入的顺序排序的，定制化的数据，完全根据你查什么返回什么结果。这就是 GraphQL 被称作 API 查询语言的原因。  
+如果你对返回的名称不满意，还可以设置别名：
+![](images/2020-07-28-16-48-22.png)
+
+#### 请求流程
+![](images/2020-07-28-16-49-08.png)
+通过上方的例子我们可以看出客户端发送请求会被 graphql 解析，根据映射关系找到对应的 resolver。路由将数据传递到对应的 resolver，resolver 去调用对应的 connector 进行处理，connector 再调用 service 进行数据库处理。
+
