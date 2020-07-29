@@ -30,6 +30,12 @@ export default (appInfo: EggAppInfo) => {
       debug: true, // 一个布尔值，如果发生执行错误，它将打印其他调试日志记录
     },
   };
+  config.sequelize = {
+    dialect: "mysql", // support: mysql, mariadb, postgres, mssql
+    host: "127.0.0.1",
+    port: 3306,
+    database: "egg-sequelize-doc-unittest", // /数据库名
+  };
 
   config.cors = {
     origin: "*",
